@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.engineering.repository.EngineerRepository">
+
+    <!-- ResultMap定義 -->
+    <resultMap id="engineerResultMap" type="com.example.engineering.entity.Engineer">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="department" column="department"/>
+        <result property="project" column="project"/>
+        <result property="skillLevel" column="skill_level"/>
+        <result property="yearsOfExperience" column="years_of_experience"/>
+        <result property="note" column="note"/>
+    </resultMap>
+
+    <!-- 全件取得 -->
+    <select id="selectAll" resultMap="engineerResultMap">
+        SELECT 
+            id,
+            name,
+            department,
+            project,
+            skill_level,
+            years_of_experience,
+            note
+        FROM engineer_profile
+        ORDER BY id
+    </select>
+
+    <!-- IDで取得 -->
+    <select id="selectById" resultMap="engineerResultMap" parameterType="long">
+        SELECT 
+            id,
+            name,
+            department,
+            project,
+            skill_level,
+            years_of_experience,
+            note
+        FROM engineer_profile
+        WHERE id = #{id}
+    </select>
+
+    <!-- 登録 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.example.engineering.entity.Engineer">
+        INSERT INTO engineer_profile (
+            name,
+            department,
+            project,
+            skill_level,
+            years_of_experience,
+            note
+        ) VALUES (
+            #{name},
+            #{department},
+            #{project},
+            #{skillLevel},
+            #{yearsOfExperience},
+            #{note}
+        )
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="com.example.engineering.entity.Engineer">
+        UPDATE engineer_profile 
+        SET
+            name = #{name},
+            department = #{department},
+            project = #{project},
+            skill_level = #{skillLevel},
+            years_of_experience = #{yearsOfExperience},
+            note = #{note}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 削除 -->
+    <delete id="delete" parameterType="long">
+        DELETE FROM engineer_profile 
+        WHERE id = #{id}
+    </delete>
+
+</mapper>

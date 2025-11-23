@@ -1,0 +1,36 @@
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# Eclipse
+.settings/
+.classpath
+.project
+.factorypath
+
+# IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# macOS
+.DS_Store
+
+# ログファイル
+*.log
+
+# 一時ファイル
+*.tmp
+*.swp
+*~
+
+# データベース設定（パスワードを含む場合は除外）
+# src/main/resources/application.properties
