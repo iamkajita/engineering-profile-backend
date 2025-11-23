@@ -1,5 +1,5 @@
 ### MySQL
-'''
+```
 # テーブル作成
 CREATE TABLE engineer_profile (
 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -15,4 +15,9 @@ note TEXT
 INSERT INTO engineer_profile (name, department, project, skill_level, years_of_experience, note) VALUES
 ('山田太郎', '開発部', 'ECサイトリニューアル', '上級', 8, 'Javaが得意。Spring Bootでの開発経験豊富。'),
 ('佐藤花子', '営業部', '待機中', 'エキスパート', 12, 'プロジェクトマネージャー経験あり。英語対応可能。');
-'''
+```
+
+
+1. java17
+2. SpringBoot
+3. mySQL
