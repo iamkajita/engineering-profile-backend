@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.engineering.repository.DepartmentRepository">
+
+    <!-- ResultMap定義 -->
+    <resultMap id="departmentResultMap" type="com.example.engineering.entity.Department">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <!-- 全部署を取得 -->
+    <select id="findAll" resultMap="departmentResultMap">
+        SELECT 
+            id,
+            name,
+            created_at,
+            updated_at
+        FROM department
+        ORDER BY id
+    </select>
+
+    <!-- IDで部署を取得 -->
+    <select id="findById" parameterType="long" resultMap="departmentResultMap">
+        SELECT 
+            id,
+            name,
+            created_at,
+            updated_at
+        FROM department
+        WHERE id = #{id}
+    </select>
+
+    <!-- 部署名で部署を取得 -->
+    <select id="findByName" parameterType="string" resultMap="departmentResultMap">
+        SELECT 
+            id,
+            name,
+            created_at,
+            updated_at
+        FROM department
+        WHERE name = #{name}
+    </select>
+
+    <!-- 部署を作成 -->
+    <insert id="insert" parameterType="com.example.engineering.entity.Department"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO department (
+            name,
+            created_at,
+            updated_at
+        ) VALUES (
+            #{name},
+            NOW(),
+            NOW()
+        )
+    </insert>
+
+    <!-- 部署を更新 -->
+    <update id="update" parameterType="com.example.engineering.entity.Department">
+        UPDATE department
+        SET 
+            name = #{name},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 部署を削除 -->
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM department
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 部署名の重複チェック（自分以外） -->
+    <select id="countByNameExcludingId" resultType="int">
+        SELECT COUNT(*)
+        FROM department
+        WHERE name = #{name}
+        AND id != #{id}
+    </select>
+
+</mapper>

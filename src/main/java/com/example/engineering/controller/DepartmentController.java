@@ -17,36 +17,36 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.engineering.entity.Engineer;
-import com.example.engineering.form.EngineerForm;
-import com.example.engineering.service.EngineerService;
+import com.example.engineering.entity.Department;
+import com.example.engineering.form.DepartmentForm;
+import com.example.engineering.service.DepartmentService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/engineers")
+@RequestMapping("/api/departments")
 @RequiredArgsConstructor
-public class EngineerController {
+public class DepartmentController {
     
-    private final EngineerService engineerService;
+    private final DepartmentService departmentService;
     
     /**
-     * 全エンジニアを取得
+     * 全部署を取得
      */
     @GetMapping
-    public ResponseEntity<List<Engineer>> getAllEngineers() {
-        List<Engineer> engineers = engineerService.findAll();
-        return ResponseEntity.ok(engineers);
+    public ResponseEntity<List<Department>> getAllDepartments() {
+        List<Department> departments = departmentService.findAll();
+        return ResponseEntity.ok(departments);
     }
     
     /**
-     * IDでエンジニアを取得
+     * IDで部署を取得
      */
     @GetMapping("/{id}")
-    public ResponseEntity<?> getEngineerById(@PathVariable Long id) {
+    public ResponseEntity<?> getDepartmentById(@PathVariable Long id) {
         try {
-            Engineer engineer = engineerService.findById(id);
-            return ResponseEntity.ok(engineer);
+            Department department = departmentService.findById(id);
+            return ResponseEntity.ok(department);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(createErrorResponse(e.getMessage()));
@@ -54,21 +54,11 @@ public class EngineerController {
     }
     
     /**
-     * 部署IDでエンジニアを検索
-     */
-    @GetMapping("/department/{departmentId}")
-    public ResponseEntity<List<Engineer>> getEngineersByDepartmentId(
-            @PathVariable Long departmentId) {
-        List<Engineer> engineers = engineerService.findByDepartmentId(departmentId);
-        return ResponseEntity.ok(engineers);
-    }
-    
-    /**
-     * エンジニアを作成
+     * 部署を作成
      */
     @PostMapping
-    public ResponseEntity<?> createEngineer(
-            @Validated @RequestBody EngineerForm form,
+    public ResponseEntity<?> createDepartment(
+            @Validated @RequestBody DepartmentForm form,
             BindingResult bindingResult) {
         
         if (bindingResult.hasErrors()) {
@@ -77,8 +67,8 @@ public class EngineerController {
         }
         
         try {
-            Engineer engineer = engineerService.create(form);
-            return ResponseEntity.status(HttpStatus.CREATED).body(engineer);
+            Department department = departmentService.create(form);
+            return ResponseEntity.status(HttpStatus.CREATED).body(department);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest()
                     .body(createErrorResponse(e.getMessage()));
@@ -86,12 +76,12 @@ public class EngineerController {
     }
     
     /**
-     * エンジニアを更新
+     * 部署を更新
      */
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateEngineer(
+    public ResponseEntity<?> updateDepartment(
             @PathVariable Long id,
-            @Validated @RequestBody EngineerForm form,
+            @Validated @RequestBody DepartmentForm form,
             BindingResult bindingResult) {
         
         if (bindingResult.hasErrors()) {
@@ -100,8 +90,8 @@ public class EngineerController {
         }
         
         try {
-            Engineer engineer = engineerService.update(id, form);
-            return ResponseEntity.ok(engineer);
+            Department department = departmentService.update(id, form);
+            return ResponseEntity.ok(department);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest()
                     .body(createErrorResponse(e.getMessage()));
@@ -109,14 +99,14 @@ public class EngineerController {
     }
     
     /**
-     * エンジニアを削除
+     * 部署を削除
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteEngineer(@PathVariable Long id) {
+    public ResponseEntity<?> deleteDepartment(@PathVariable Long id) {
         try {
-            engineerService.delete(id);
+            departmentService.delete(id);
             Map<String, String> response = new HashMap<>();
-            response.put("message", "エンジニアを削除しました");
+            response.put("message", "部署を削除しました");
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest()

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.engineering.repository.EngineerRepository">
 
@@ -8,53 +8,76 @@
     <resultMap id="engineerResultMap" type="com.example.engineering.entity.Engineer">
         <id property="id" column="id"/>
         <result property="name" column="name"/>
-        <result property="department" column="department"/>
+        <result property="departmentId" column="department_id"/>
+        <result property="departmentName" column="department_name"/>
         <result property="project" column="project"/>
         <result property="skillLevel" column="skill_level"/>
         <result property="yearsOfExperience" column="years_of_experience"/>
         <result property="note" column="note"/>
     </resultMap>
 
-    <!-- 全件取得 -->
-    <select id="selectAll" resultMap="engineerResultMap">
+    <!-- 全エンジニアを取得（部署名付き） -->
+    <select id="findAll" resultMap="engineerResultMap">
         SELECT 
-            id,
-            name,
-            department,
-            project,
-            skill_level,
-            years_of_experience,
-            note
-        FROM engineer_profile
-        ORDER BY id
+            e.id,
+            e.name,
+            e.department_id,
+            d.name as department_name,
+            e.project,
+            e.skill_level,
+            e.years_of_experience,
+            e.note
+        FROM engineer_profile e
+        LEFT JOIN department d ON e.department_id = d.id
+        ORDER BY e.id
     </select>
 
-    <!-- IDで取得 -->
-    <select id="selectById" resultMap="engineerResultMap" parameterType="long">
+    <!-- IDでエンジニアを取得（部署名付き） -->
+    <select id="findById" parameterType="long" resultMap="engineerResultMap">
         SELECT 
-            id,
-            name,
-            department,
-            project,
-            skill_level,
-            years_of_experience,
-            note
-        FROM engineer_profile
-        WHERE id = #{id}
+            e.id,
+            e.name,
+            e.department_id,
+            d.name as department_name,
+            e.project,
+            e.skill_level,
+            e.years_of_experience,
+            e.note
+        FROM engineer_profile e
+        LEFT JOIN department d ON e.department_id = d.id
+        WHERE e.id = #{id}
     </select>
 
-    <!-- 登録 -->
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.example.engineering.entity.Engineer">
+    <!-- 部署IDでエンジニアを検索（部署名付き） -->
+    <select id="findByDepartmentId" parameterType="long" resultMap="engineerResultMap">
+        SELECT 
+            e.id,
+            e.name,
+            e.department_id,
+            d.name as department_name,
+            e.project,
+            e.skill_level,
+            e.years_of_experience,
+            e.note
+        FROM engineer_profile e
+        LEFT JOIN department d ON e.department_id = d.id
+        WHERE e.department_id = #{departmentId}
+        ORDER BY e.id
+    </select>
+
+    <!-- エンジニアを作成 -->
+    <insert id="insert" parameterType="com.example.engineering.entity.Engineer"
+            useGeneratedKeys="true" keyProperty="id">
         INSERT INTO engineer_profile (
             name,
-            department,
+            department_id,
             project,
             skill_level,
             years_of_experience,
             note
         ) VALUES (
             #{name},
-            #{department},
+            #{departmentId},
             #{project},
             #{skillLevel},
             #{yearsOfExperience},
@@ -62,12 +85,12 @@
         )
     </insert>
 
-    <!-- 更新 -->
+    <!-- エンジニアを更新 -->
     <update id="update" parameterType="com.example.engineering.entity.Engineer">
-        UPDATE engineer_profile 
-        SET
+        UPDATE engineer_profile
+        SET 
             name = #{name},
-            department = #{department},
+            department_id = #{departmentId},
             project = #{project},
             skill_level = #{skillLevel},
             years_of_experience = #{yearsOfExperience},
@@ -75,9 +98,9 @@
         WHERE id = #{id}
     </update>
 
-    <!-- 削除 -->
-    <delete id="delete" parameterType="long">
-        DELETE FROM engineer_profile 
+    <!-- エンジニアを削除 -->
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM engineer_profile
         WHERE id = #{id}
     </delete>
 
